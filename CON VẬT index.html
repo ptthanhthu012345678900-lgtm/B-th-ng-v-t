@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bộ thủ động vật</title>
+<style>
+:root{
+  --paper:#faf6ef; --ink:#2b2620; --muted:#8a7d6c;
+  --line:#e8dcc8; --accent:#b85a1a; --accent-soft:#f5e0c8;
+  --cjk:"Noto Serif CJK SC","Songti SC","PingFang SC","Microsoft YaHei",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     background:var(--paper);color:var(--ink);line-height:1.5}
+main{max-width:620px;margin:0 auto;padding:24px 18px 56px}
+h1{font-size:.9rem;font-weight:600;margin:0 0 16px;text-align:center;
+   color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+
+.stage{background:#fff;border-radius:26px;padding:10px;
+       border:1.5px solid var(--line);overflow:hidden;
+       box-shadow:0 8px 32px rgba(184,90,26,.08)}
+svg#fig{width:100%;height:auto;display:block}
+
+.hotspot{cursor:pointer;outline:none;
+  transform-box:fill-box;transform-origin:center;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.hotspot:hover{transform:scale(1.14)}
+.hotspot circle{
+  fill:url(#spot);stroke:var(--accent);stroke-width:1.8;
+  filter:drop-shadow(0 2px 4px rgba(184,90,26,.3));
+  transition:fill .2s,stroke-width .2s;
+}
+.hotspot .glyph{
+  font-family:var(--cjk);font-size:20px;fill:var(--ink);
+  text-anchor:middle;dominant-baseline:central;
+  pointer-events:none;transition:fill .2s;
+}
+.hotspot.sel{transform:scale(1.14)}
+.hotspot.sel circle{fill:var(--accent);stroke:#7a3a0a;stroke-width:2.5}
+.hotspot.sel .glyph{fill:#fff}
+.hotspot:focus-visible circle{stroke-width:4}
+
+.card{background:#fff;border-radius:26px;border:1.5px solid var(--line);
+      padding:28px 20px 26px;margin-top:14px;text-align:center;min-height:280px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      box-shadow:0 8px 32px rgba(184,90,26,.08)}
+.card .icon{font-size:76px;line-height:1;margin-bottom:12px;
+             filter:drop-shadow(0 4px 10px rgba(0,0,0,.12))}
+.card .glyph{font-family:var(--cjk);font-size:62px;line-height:1;
+             color:var(--accent);margin-bottom:4px}
+.card .variant{font-family:var(--cjk);font-size:.95rem;color:var(--muted);
+               margin-bottom:6px}
+.card .pron{font-size:1.3rem;margin:0 0 2px;letter-spacing:.02em}
+.card .pron .hv{color:var(--muted);margin-left:8px;font-size:1rem;letter-spacing:0}
+.card .meaning{font-size:1.3rem;font-weight:600;margin:0 0 20px;
+               color:var(--accent)}
+.card .examples{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.card .ex{display:flex;flex-direction:column;align-items:center;gap:1px;
+          padding:8px 12px;border-radius:12px;background:#fdfaf5;
+          border:1px solid var(--line);min-width:60px}
+.card .ex .c{font-family:var(--cjk);font-size:26px;line-height:1.15}
+.card .ex .hv{font-size:.7rem;color:var(--muted)}
+.card .ex .m{font-size:.78rem}
+.card .hint{color:var(--muted);font-size:1.1rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Bộ thủ động vật</h1>
+
+  <section class="stage">
+    <svg id="fig" viewBox="0 0 500 400" role="img" aria-label="Sơ đồ động vật">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9dd0e8"/>
+          <stop offset="70%" stop-color="#d8ecf2"/>
+          <stop offset="100%" stop-color="#f5ead4"/>
+        </linearGradient>
+        <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9bc47a"/>
+          <stop offset="100%" stop-color="#4f7a30"/>
+        </linearGradient>
+        <radialGradient id="pond" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="#a4dcef"/>
+          <stop offset="100%" stop-color="#3a90c5"/>
+        </radialGradient>
+        <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fffbe0"/>
+          <stop offset="100%" stop-color="#ffd23f"/>
+        </radialGradient>
+        <radialGradient id="spot" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="100%" stop-color="#f8ecdf"/>
+        </radialGradient>
+        <filter id="blur"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+
+      <!-- bầu trời -->
+      <rect width="500" height="400" fill="url(#sky)"/>
+
+      <!-- mặt trời -->
+      <circle cx="55" cy="52" r="34" fill="#ffd23f" opacity="0.28" filter="url(#blur)"/>
+      <circle cx="55" cy="52" r="20" fill="url(#sun)"/>
+
+      <!-- mây -->
+      <ellipse cx="180" cy="55" rx="34" ry="12" fill="#fff" opacity="0.7"/>
+      <ellipse cx="205" cy="50" rx="26" ry="14" fill="#fff" opacity="0.7"/>
+      <ellipse cx="360" cy="45" rx="30" ry="10" fill="#fff" opacity="0.6"/>
+      <ellipse cx="385" cy="42" rx="22" ry="12" fill="#fff" opacity="0.6"/>
+
+      <!-- đồi xa -->
+      <path d="M0 285 Q120 235 220 275 Q320 235 420 270 Q460 258 500 278 L500 300 L0 300 Z"
+            fill="#a8c890" opacity="0.85"/>
+
+      <!-- đồng cỏ -->
+      <path d="M0 285 Q250 270 500 290 L500 400 L0 400 Z" fill="url(#grass)"/>
+
+      <!-- cái ao -->
+      <ellipse cx="430" cy="373" rx="75" ry="28" fill="url(#pond)"/>
+      <ellipse cx="430" cy="373" rx="58" ry="20" fill="#7fc4dc" opacity="0.35"/>
+      <ellipse cx="425" cy="368" rx="20" ry="4" fill="#fff" opacity="0.4"/>
+
+      <!-- cây bên trái -->
+      <rect x="22" y="210" width="14" height="80" fill="#6a4224" rx="3"/>
+      <circle cx="29" cy="200" r="34" fill="#5a8a4a"/>
+      <circle cx="5"  cy="215" r="24" fill="#5a8a4a"/>
+      <circle cx="53" cy="215" r="24" fill="#5a8a4a"/>
+      <circle cx="29" cy="170" r="22" fill="#6a9a54"/>
+
+      <!-- hoa nhỏ -->
+      <circle cx="175" cy="358" r="3" fill="#ff6b8a"/>
+      <circle cx="188" cy="370" r="3" fill="#ffcb47"/>
+      <circle cx="158" cy="372" r="3" fill="#a880d4"/>
+      <circle cx="215" cy="382" r="3" fill="#ff6b8a"/>
+      <circle cx="240" cy="375" r="2.5" fill="#ffcb47"/>
+
+      <!-- ============ CHÓ (犭) ============ -->
+      <g id="dog">
+        <!-- đuôi cong -->
+        <path d="M52 315 Q32 300 38 288" stroke="#b58a5a" stroke-width="6"
+              fill="none" stroke-linecap="round"/>
+        <!-- thân -->
+        <ellipse cx="85" cy="318" rx="35" ry="15" fill="#c9a27a"/>
+        <!-- 4 chân -->
+        <line x1="65"  y1="325" x2="65"  y2="345" stroke="#b58a5a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="78"  y1="325" x2="78"  y2="345" stroke="#b58a5a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="95"  y1="325" x2="95"  y2="345" stroke="#b58a5a" stroke-width="5" stroke-linecap="round"/>
+        <line x1="108" y1="325" x2="108" y2="345" stroke="#b58a5a" stroke-width="5" stroke-linecap="round"/>
+        <!-- đầu -->
+        <circle cx="118" cy="308" r="12" fill="#c9a27a"/>
+        <!-- tai -->
+        <ellipse cx="112" cy="298" rx="5" ry="9" fill="#a07f5a" transform="rotate(-20 112 298)"/>
+        <!-- mõm + mũi -->
+        <circle cx="128" cy="311" r="4.5" fill="#a07f5a"/>
+        <circle cx="130" cy="310" r="1.2" fill="#2b2620"/>
+        <!-- mắt -->
+        <circle cx="121" cy="305" r="1.5" fill="#2b2620"/>
+      </g>
+
+      <!-- ============ NGỰA (马) ============ -->
+      <g id="horse">
+        <!-- đuôi -->
+        <path d="M232 298 Q208 305 214 335" stroke="#6a4224" stroke-width="7"
+              fill="none" stroke-linecap="round"/>
+        <!-- 4 chân -->
+        <line x1="245" y1="315" x2="245" y2="368" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/>
+        <line x1="262" y1="315" x2="262" y2="368" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/>
+        <line x1="292" y1="315" x2="292" y2="368" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/>
+        <line x1="309" y1="315" x2="309" y2="368" stroke="#8a5a30" stroke-width="6" stroke-linecap="round"/>
+        <!-- thân -->
+        <ellipse cx="275" cy="303" rx="46" ry="20" fill="#a86a3a"/>
+        <!-- cổ -->
+        <path d="M308 292 L326 255 L342 262 L318 305 Z" fill="#a86a3a"/>
+        <!-- bờm -->
+        <path d="M312 268 Q322 252 336 242" stroke="#6a4224" stroke-width="3.5" fill="none"/>
+        <!-- đầu -->
+        <ellipse cx="337" cy="252" rx="15" ry="10" fill="#a86a3a" transform="rotate(-25 337 252)"/>
+        <!-- tai -->
+        <path d="M330 245 L332 236 L337 243 Z" fill="#8a5a30"/>
+        <!-- mõm -->
+        <ellipse cx="349" cy="248" rx="4" ry="3" fill="#8a5a30" transform="rotate(-25 349 248)"/>
+        <!-- mắt -->
+        <circle cx="342" cy="249" r="1.5" fill="#2b2620"/>
+      </g>
+
+      <!-- ============ CHIM (鸟) ============ -->
+      <g id="bird">
+        <!-- đuôi -->
+        <path d="M128 85 L112 80 L118 92 Z" fill="#3a6cc0"/>
+        <!-- cánh -->
+        <path d="M145 78 Q158 58 178 68 Q168 82 145 78 Z" fill="#3a6cc0"/>
+        <!-- thân -->
+        <ellipse cx="153" cy="82" rx="24" ry="10" fill="#5a9ae0"/>
+        <!-- đầu -->
+        <circle cx="178" cy="75" r="9" fill="#5a9ae0"/>
+        <!-- mỏ -->
+        <path d="M187 73 L198 76 L187 79 Z" fill="#ffb84d"/>
+        <!-- mắt -->
+        <circle cx="181" cy="73" r="1.6" fill="#2b2620"/>
+      </g>
+
+      <!-- ============ BƯỚM (虫) ============ -->
+      <g id="butterfly">
+        <!-- râu -->
+        <path d="M280 176 L274 165" stroke="#2b2620" stroke-width="1.2" fill="none"/>
+        <path d="M280 176 L286 165" stroke="#2b2620" stroke-width="1.2" fill="none"/>
+        <circle cx="274" cy="165" r="1.2" fill="#2b2620"/>
+        <circle cx="286" cy="165" r="1.2" fill="#2b2620"/>
+        <!-- cánh trên -->
+        <ellipse cx="270" cy="178" rx="10" ry="13" fill="#ff8ab4"
+                 transform="rotate(-22 270 178)" opacity="0.92"/>
+        <ellipse cx="290" cy="178" rx="10" ry="13" fill="#ff8ab4"
+                 transform="rotate(22 290 178)" opacity="0.92"/>
+        <!-- cánh dưới -->
+        <ellipse cx="273" cy="190" rx="7" ry="9" fill="#ffcb47"
+                 transform="rotate(-15 273 190)" opacity="0.92"/>
+        <ellipse cx="287" cy="190" rx="7" ry="9" fill="#ffcb47"
+                 transform="rotate(15 287 190)" opacity="0.92"/>
+        <!-- thân -->
+        <ellipse cx="280" cy="183" rx="2" ry="10" fill="#2b2620"/>
+      </g>
+
+      <!-- ============ CÁ (鱼) ============ -->
+      <g id="fish">
+        <!-- đuôi -->
+        <path d="M408 372 L392 362 L392 382 Z" fill="#e87a20"/>
+        <!-- thân -->
+        <ellipse cx="430" cy="372" rx="22" ry="10" fill="#ff9e42"/>
+        <!-- vây lưng -->
+        <path d="M424 362 L434 356 L442 365 Z" fill="#e87a20"/>
+        <!-- vây bụng -->
+        <path d="M424 380 L432 384 L438 379 Z" fill="#e87a20"/>
+        <!-- vệt vảy -->
+        <path d="M420 372 Q426 367 432 372" stroke="#e87a20" stroke-width="1" fill="none"/>
+        <path d="M430 372 Q436 367 442 372" stroke="#e87a20" stroke-width="1" fill="none"/>
+        <!-- mắt -->
+        <circle cx="444" cy="370" r="1.8" fill="#2b2620"/>
+        <!-- bong bóng nước -->
+        <circle cx="450" cy="366" r="1.5" fill="#fff" opacity="0.7"/>
+      </g>
+
+      <g id="hotspots"></g>
+    </svg>
+  </section>
+
+  <section class="card" id="card"></section>
+</main>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+
+/* ==== 5 bộ thủ động vật (giản thể) ==== */
+const RADICALS = {
+  quan:  {glyph:"犭", variant:"犬", pinyin:"quǎn", hv:"khuyển", meaning:"động vật (chó)", icon:"🐕",
+          ex:[{c:"狗",hv:"cẩu",m:"chó"},{c:"猫",hv:"miêu",m:"mèo"},{c:"猪",hv:"trư",m:"lợn"}]},
+  niao:  {glyph:"鸟", variant:"",   pinyin:"niǎo", hv:"điểu", meaning:"chim",         icon:"🐦",
+          ex:[{c:"鸡",hv:"kê",m:"gà"},{c:"鸭",hv:"áp",m:"vịt"},{c:"鸽",hv:"cáp",m:"bồ câu"}]},
+  yu:    {glyph:"鱼", variant:"",   pinyin:"yú",   hv:"ngư", meaning:"cá",             icon:"🐟",
+          ex:[{c:"鲜",hv:"tiên",m:"tươi"},{c:"鲤",hv:"lý",m:"cá chép"},{c:"鲸",hv:"kình",m:"cá voi"}]},
+  chong: {glyph:"虫", variant:"",   pinyin:"chóng",hv:"trùng", meaning:"côn trùng",     icon:"🦋",
+          ex:[{c:"蜂",hv:"phong",m:"ong"},{c:"蚊",hv:"văn",m:"muỗi"},{c:"蛇",hv:"xà",m:"rắn"}]},
+  ma:    {glyph:"马", variant:"",   pinyin:"mǎ",   hv:"mã", meaning:"ngựa",             icon:"🐴",
+          ex:[{c:"骑",hv:"kỵ",m:"cưỡi"},{c:"驾",hv:"giá",m:"lái xe"},{c:"驰",hv:"trì",m:"chạy nhanh"}]}
+};
+
+/* ==== vị trí hotspot ==== */
+const SPOTS = [
+  {id:"niao",  x:153, y:82,  r:16},   /* chim */
+  {id:"chong", x:280, y:182, r:15},   /* bướm */
+  {id:"ma",    x:275, y:303, r:20},   /* ngựa */
+  {id:"quan",  x:85,  y:318, r:17},   /* chó */
+  {id:"yu",    x:430, y:372, r:15}    /* cá */
+];
+
+const panel    = document.getElementById("card");
+const svgSpots = document.getElementById("hotspots");
+
+SPOTS.forEach(s => {
+  const r = RADICALS[s.id];
+  const g = document.createElementNS(NS,"g");
+  g.setAttribute("class","hotspot");
+  g.setAttribute("tabindex","0");
+  g.setAttribute("role","button");
+  g.setAttribute("aria-label", r.pinyin + " " + r.hv);
+  g.dataset.id = s.id;
+
+  const c = document.createElementNS(NS,"circle");
+  c.setAttribute("cx",s.x); c.setAttribute("cy",s.y); c.setAttribute("r",s.r);
+
+  const t = document.createElementNS(NS,"text");
+  t.setAttribute("class","glyph");
+  t.setAttribute("x",s.x); t.setAttribute("y",s.y);
+  t.textContent = r.glyph;
+
+  g.append(c,t);
+  g.addEventListener("click", () => select(s.id));
+  g.addEventListener("keydown", e => {
+    if(e.key==="Enter"||e.key===" "){ e.preventDefault(); select(s.id); }
+  });
+  svgSpots.appendChild(g);
+});
+
+function select(id){
+  document.querySelectorAll(".hotspot").forEach(el =>
+    el.classList.toggle("sel", el.dataset.id === id));
+  renderCard(id);
+}
+
+function renderCard(id){
+  const r = RADICALS[id];
+  panel.innerHTML = `
+    <div class="icon">${r.icon}</div>
+    <div class="glyph">${r.glyph}</div>
+    ${r.variant ? `<div class="variant">biến thể: ${r.variant}</div>` : ""}
+    <p class="pron">${r.pinyin}<span class="hv">· ${r.hv}</span></p>
+    <p class="meaning">${r.meaning}</p>
+    <div class="examples">
+      ${r.ex.map(x => `
+        <div class="ex">
+          <span class="c">${x.c}</span>
+          <span class="hv">${x.hv}</span>
+          <span class="m">${x.m}</span>
+        </div>`).join("")}
+    </div>`;
+}
+
+panel.innerHTML = `<p class="hint">👆 Chạm vào một con vật</p>`;
+</script>
+</body>
+</html>
